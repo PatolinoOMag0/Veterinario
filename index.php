@@ -1,73 +1,56 @@
-<?php
-// index.php
-session_start();
-?>
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Clínica Veterinária</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VetCare - Cuidado e Dedicação</title>
+    
     <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <!-- Cabeçalho -->
+    
     <header class="header">
-    <a href="#" class="logo">VetCare</a> <nav class="navbar" id="navbar">
-        <a href="#home">Início</a>
-        <a href="#sobre">Sobre Nós</a>
-        <a href="#servicos">Serviços</a>
-        <a href="#contato">Contato</a>
-    </nav>
+  <input type="checkbox" id="menu-toggle" hidden>
+  <label for="menu-toggle" class="menu-icon">☰</label>
 
-    <div id="menu-icon" class="menu-icon">
-        <i class="fas fa-bars"></i> 
-        &#9776; 
-    </div>
-
-    <script>
-    // 1. Seleciona o ícone de menu e o container de navegação
-    let menuIcon = document.querySelector('#menu-icon');
-    let navbar = document.querySelector('#navbar');
-
-    // 2. Adiciona um evento de clique ao ícone
-    menuIcon.onclick = () => {
-        // 3. Alterna a classe 'active' no menu de navegação
-        // Se a classe existir, ele remove; se não existir, ele adiciona.
-        navbar.classList.toggle('active');
-    };
-</script>
-<body>
+  <nav class="menu">
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Serviços</a></li>
+      <li><a href="#">Equipe</a></li>
+      <li><a href="#">Contato</a></li>
+    </ul>
+  </nav>
 </header>
 
-    <!-- Banner -->
-    <section class="banner">
-        <h1>Bem-vindo à VetCare</h1>
-        <p>Cuidando do seu melhor amigo com carinho e dedicação 💙</p>
-        <a href="login.php" class="btn">Área Restrita</a>
-    </section>
 
-    <!-- Serviços -->
-    <section class="servicos">
-        <h2>Nossos Serviços</h2>
-        <div class="cards">
-            <div class="card">
-                <h3>Consultas</h3>
-                <p>Atendimento veterinário completo para cães e gatos.</p>
-            </div>
-            <div class="card">
-                <h3>Vacinação</h3>
-                <p>Proteção contra doenças com vacinas atualizadas.</p>
-            </div>
-            <div class="card">
-                <h3>Exames</h3>
-                <p>Exames laboratoriais e diagnósticos rápidos.</p>
-            </div>
+
+
+
+    <section class="home" id="home">
+        <div class="home-content">
+            <h1>Bem-vindo à VetCare</h1>
+            <p>Cuidando do seu melhor amigo com carinho e dedicação ❤️</p>
         </div>
     </section>
 
-    <!-- Rodapé -->
-    <footer>
-        <p>© 2025 VetCare - Todos os direitos reservados.</p>
-    </footer>
+    <script>
+        let menuIcon = document.querySelector('#menu-icon');
+        let navbar = document.querySelector('#navbar');
+
+        menuIcon.onclick = () => {
+            // Alterna a classe 'active' para abrir/fechar o menu
+            navbar.classList.toggle('active');
+        };
+
+        // Fecha o menu ao clicar em um link (opcional, mas recomendado no mobile)
+        document.querySelectorAll('.navbar a').forEach(link => {
+            link.addEventListener('click', () => {
+                navbar.classList.remove('active');
+            });
+        });
+    </script>
 </body>
 </html>
