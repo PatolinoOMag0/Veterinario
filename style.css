@@ -10,89 +10,82 @@ body {
     color: #333;
 }
 
-header {
-    background: #0077b6;
-    padding: 15px 50px;
-    text-align: center; /* centralizar menu */
+.header {
+    background: #007bff; /* Ou a cor azul que você está usando */
+    display: flex;
+    justify-content: space-between; /* Espaça o logo e o menu */
+    align-items: center;
+    padding: 1.5rem 5%;
+    position: fixed; /* Opcional: para fixar no topo */
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
 }
 
-header .logo {
-    font-size: 24px;
-    font-weight: bold;
-}
-
-header nav a {
+.logo {
+    font-size: 2rem;
     color: white;
-    margin: 0 15px;
     text-decoration: none;
     font-weight: bold;
-    font-size: 18px;
 }
 
-header nav a:hover {
-    text-decoration: underline;
+.navbar a {
+    font-size: 1.1rem;
+    color: white;
+    text-decoration: none;
+    margin-left: 2rem;
+    transition: 0.3s;
 }
 
-.menu-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
+.navbar a:hover {
+    color: #00d9ff; /* Cor de destaque ao passar o mouse */
 }
 
-/* Botão hamburguer */
-.menu-toggle {
-    display: none;
-    font-size: 28px;
+/* O ÍCONE DE HAMBÚRGUER FICA OCULTO NO DESKTOP */
+.menu-icon {
+    font-size: 2rem;
     color: white;
     cursor: pointer;
-    position: absolute;
-    left: 15px;
+    display: none; /* ESSENCIAL: Oculta o ícone em telas grandes */
 }
 
-/* Navegação normal (desktop) */
-nav {
-    display: flex;
-    gap: 20px;
-}
-
-nav a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 18px;
-}
-
-nav a:hover {
-    text-decoration: underline;
-}
-
-/* Responsivo (mobile) */
+/* Responsivo: para telas encolhidas (mobile) */
 @media (max-width: 768px) {
-    .menu-toggle {
-        display: block;
+    
+    /* MOSTRA O ÍCONE DE HAMBÚRGUER */
+    .menu-icon {
+        display: block; 
     }
 
-    nav {
+    /* ESTILIZAÇÃO DO MENU QUANDO ELE ESTIVER FECHADO */
+    .navbar {
+        position: absolute;
+        top: 100%; /* Posiciona o menu abaixo do header */
+        left: 0;
+        right: 0;
+        background: #007bff; /* Cor de fundo do menu mobile */
         display: flex;
-        flex-direction: column;
-        background: #0077b6;
-        width: 100%;
+        flex-direction: column; /* Links empilhados verticalmente */
         text-align: center;
-
-        /* efeito de esconder/mostrar */
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.5s ease;
+        /* ESSENCIAL: Oculta o menu por padrão no mobile */
+        height: 0; 
+        overflow: hidden; /* Oculta o conteúdo que "vaza" */
+        transition: 0.3s ease-in-out;
     }
 
-    nav.active {
-        max-height: 300px; /* altura suficiente pros links */
+    .navbar a {
+        display: block;
+        margin: 1rem 0;
+        padding: 0.5rem;
     }
 
-    nav a {
-        padding: 10px 0;
-        border-top: 1px solid rgba(255,255,255,0.2);
+    /* CLASSE QUE O JS IRÁ ADICIONAR PARA ABRIR O MENU */
+    .navbar.active {
+        /* Defina uma altura que caiba todo o seu menu. */
+        /* Exemplo: 4 links com 2.5rem de altura cada. */
+        height: 12rem; 
+        padding-bottom: 1rem;
     }
 }
 

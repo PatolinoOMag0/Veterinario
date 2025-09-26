@@ -8,25 +8,36 @@ session_start();
     <meta charset="UTF-8">
     <title>Clínica Veterinária</title>
     <link rel="stylesheet" href="style.css">
-    <script>
-        function toggleMenu() {
-            const nav = document.querySelector("nav");
-            nav.classList.toggle("active");
-        }
-    </script>
 </head>
 <body>
     <!-- Cabeçalho -->
-    <header>
-        <div class="menu-container">
-            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-            <nav>
-                <a href="index.php">Início</a>
-                <a href="sobre.php">Sobre</a>
-                <a href="login.php">Login</a>
-            </nav>
-        </div>
-    </header>
+    <header class="header">
+    <a href="#" class="logo">VetCare</a> <nav class="navbar" id="navbar">
+        <a href="#home">Início</a>
+        <a href="#sobre">Sobre Nós</a>
+        <a href="#servicos">Serviços</a>
+        <a href="#contato">Contato</a>
+    </nav>
+
+    <div id="menu-icon" class="menu-icon">
+        <i class="fas fa-bars"></i> 
+        &#9776; 
+    </div>
+
+    <script>
+    // 1. Seleciona o ícone de menu e o container de navegação
+    let menuIcon = document.querySelector('#menu-icon');
+    let navbar = document.querySelector('#navbar');
+
+    // 2. Adiciona um evento de clique ao ícone
+    menuIcon.onclick = () => {
+        // 3. Alterna a classe 'active' no menu de navegação
+        // Se a classe existir, ele remove; se não existir, ele adiciona.
+        navbar.classList.toggle('active');
+    };
+</script>
+<body>
+</header>
 
     <!-- Banner -->
     <section class="banner">
