@@ -1,6 +1,6 @@
 <?php
-// agendamento.php
 include 'includes/db_connect.php';
+include 'auth.php';
 
 // Pega lista de clientes e animais
 $clientes = mysqli_query($conn, "SELECT id, nome FROM clientes");

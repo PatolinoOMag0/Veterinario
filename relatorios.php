@@ -1,12 +1,11 @@
 <?php
 include 'includes/db_connect.php';
+include 'auth.php';
 
-$sql = "SELECT c.id, c.data, c.hora, a.nome AS animal, cl.nome AS cliente, c.veterinario, c.observacoes 
-        FROM consultas c
-        JOIN animais a ON c.animal_id = a.id
-        JOIN clientes cl ON c.cliente_id = cl.id
-        ORDER BY c.data DESC, c.hora DESC";
-$consultas = mysqli_query($conn, $sql);
+// Pegar clientes e animais para os relatórios
+$clientes = mysqli_query($conn, "SELECT * FROM clientes");
+$animais = mysqli_query($conn, "SELECT * FROM animais");
+$consultas = mysqli_query($conn, "SELECT * FROM consultas");
 ?>
 
 <!DOCTYPE html>
@@ -16,28 +15,8 @@ $consultas = mysqli_query($conn, $sql);
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Relatórios - VetCare</title>
 <link rel="stylesheet" href="style.css">
-<style>
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-table th, table td {
-    border: 1px solid #007BFF;
-    padding: 10px;
-    text-align: left;
-}
-table th {
-    background-color: #007BFF;
-    color: #fff;
-}
-tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-</style>
 </head>
 <body>
-
 <header>
     <div class="container">
         <h1>VetCare</h1>
@@ -56,32 +35,81 @@ tr:nth-child(even) {
 </header>
 
 <section>
-    <div class="container">
-        <h2>Relatórios de Consultas</h2>
-        <table>
-            <tr>
-                <th>Data</th>
-                <th>Hora</th>
-                <th>Animal</th>
-                <th>Cliente</th>
-                <th>Veterinário</th>
-                <th>Observações</th>
-            </tr>
-            <?php while($row = mysqli_fetch_assoc($consultas)) { ?>
-            <tr>
-                <td><?= date("d/m/Y", strtotime($row['data'])) ?></td>
-                <td><?= date("H:i", strtotime($row['hora'])) ?></td>
-                <td><?= $row['animal'] ?></td>
-                <td><?= $row['cliente'] ?></td>
-                <td><?= $row['veterinario'] ?></td>
-                <td><?= $row['observacoes'] ?></td>
-            </tr>
-            <?php } ?>
-        </table>
-    </div>
+<h3>Clientes</h3>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>CPF</th>
+        <th>Endereço</th>
+        <th>Telefone</th>
+        <th>Email</th>
+    </tr>
+    <?php while($row = mysqli_fetch_assoc($clientes)): ?>
+    <tr>
+        <td><?= $row['id'] ?></td>
+        <td><?= $row['nome'] ?></td>
+        <td><?= $row['cpf'] ?></td>
+        <td><?= $row['endereco'] ?></td>
+        <td><?= $row['telefone'] ?></td>
+        <td><?= $row['email'] ?></td>
+    </tr>
+    <?php endwhile; ?>
+</table>
+
+<h3>Animais</h3>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Espécie</th>
+        <th>Raça</th>
+        <th>Idade</th>
+        <th>Sexo</th>
+        <th>Peso</th>
+        <th>Cliente ID</th>
+    </tr>
+    <?php while($row = mysqli_fetch_assoc($animais)): ?>
+    <tr>
+        <td><?= $row['id'] ?></td>
+        <td><?= $row['nome'] ?></td>
+        <td><?= $row['especie'] ?></td>
+        <td><?= $row['raca'] ?></td>
+        <td><?= $row['idade'] ?></td>
+        <td><?= $row['sexo'] ?></td>
+        <td><?= $row['peso'] ?></td>
+        <td><?= $row['cliente_id'] ?></td>
+    </tr>
+    <?php endwhile; ?>
+</table>
+
+<h3>Consultas</h3>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Data</th>
+        <th>Hora</th>
+        <th>Animal ID</th>
+        <th>Cliente ID</th>
+        <th>Veterinário</th>
+        <th>Observações</th>
+    </tr>
+    <?php while($row = mysqli_fetch_assoc($consultas)): ?>
+    <tr>
+        <td><?= $row['id'] ?></td>
+        <td><?= $row['data'] ?></td>
+        <td><?= $row['hora'] ?></td>
+        <td><?= $row['animal_id'] ?></td>
+        <td><?= $row['cliente_id'] ?></td>
+        <td><?= $row['veterinario'] ?></td>
+        <td><?= $row['observacoes'] ?></td>
+    </tr>
+    <?php endwhile; ?>
+</table>
+
 </section>
 
-<footer>
+<footer class="footer">
     <p>© 2025 VetCare - Todos os direitos reservados</p>
 </footer>
 
@@ -92,6 +120,5 @@ menuLinks.forEach(link => {
     link.addEventListener('click', () => { menuToggle.checked = false; });
 });
 </script>
-
 </body>
 </html>

@@ -1,6 +1,9 @@
 <?php
 include 'includes/db_connect.php';
+include 'auth.php';
+
 $mensagem = "";
+$tipo = ""; // "success" ou "error"
 
 if(isset($_POST['submit'])){
     $nome = $_POST['nome'];
@@ -12,8 +15,10 @@ if(isset($_POST['submit'])){
     $sql = "INSERT INTO clientes (nome, cpf, endereco, telefone, email) VALUES ('$nome','$cpf','$endereco','$telefone','$email')";
     if(mysqli_query($conn, $sql)){
         $mensagem = "Cliente cadastrado com sucesso!";
+        $tipo = "success";
     } else {
         $mensagem = "Erro ao cadastrar cliente: " . mysqli_error($conn);
+        $tipo = "error";
     }
 }
 ?>
@@ -27,7 +32,6 @@ if(isset($_POST['submit'])){
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
 <header>
     <div class="container">
         <h1>VetCare</h1>
@@ -66,13 +70,13 @@ if(isset($_POST['submit'])){
 
             <input type="submit" name="submit" value="Cadastrar">
         </form>
-    </div>
-    <?php if($mensagem != ""): ?>
-        <div id="mensagem" class="mensagem-sucesso">
-    <?= $mensagem ?>
-    </div>
-<?php endif; ?>
 
+        <?php if($mensagem != ""): ?>
+        <div id="mensagem" class="mensagem-sucesso <?= $tipo ?>">
+            <?= $mensagem ?>
+        </div>
+        <?php endif; ?>
+    </div>
 </section>
 
 <footer>
@@ -80,11 +84,6 @@ if(isset($_POST['submit'])){
 </footer>
 
 <script>
-const menuLinks = document.querySelectorAll('.menu a');
-const menuToggle = document.getElementById('menu-toggle');
-menuLinks.forEach(link => {
-    link.addEventListener('click', () => { menuToggle.checked = false; });
-});
 const msg = document.getElementById('mensagem');
 if(msg){
     msg.classList.add('show');
@@ -93,6 +92,11 @@ if(msg){
     }, 3000);
 }
 
+const menuLinks = document.querySelectorAll('.menu a');
+const menuToggle = document.getElementById('menu-toggle');
+menuLinks.forEach(link => {
+    link.addEventListener('click', () => { menuToggle.checked = false; });
+});
 </script>
 </body>
 </html>

@@ -1,6 +1,9 @@
 <?php
 include 'includes/db_connect.php';
+include 'auth.php';
+
 $mensagem = "";
+$tipo = ""; // "success" ou "error"
 
 $clientes = mysqli_query($conn, "SELECT id, nome FROM clientes");
 
@@ -18,14 +21,16 @@ if(isset($_POST['submit'])){
     $sql = "INSERT INTO animais 
         (nome, especie, raca, idade, sexo, peso, historico_vacinas, observacoes, cliente_id) 
         VALUES ('$nome','$especie','$raca','$idade','$sexo','$peso','$historico','$observacoes','$cliente_id')";
+    
     if(mysqli_query($conn, $sql)){
         $mensagem = "Animal cadastrado com sucesso!";
+        $tipo = "success";
     } else {
         $mensagem = "Erro ao cadastrar animal: " . mysqli_error($conn);
+        $tipo = "error";
     }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -36,7 +41,6 @@ if(isset($_POST['submit'])){
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <header>
     <div class="container">
         <h1>VetCare</h1>
@@ -57,10 +61,6 @@ if(isset($_POST['submit'])){
 <section>
     <div class="container">
         <h2>Cadastro de Animais</h2>
-        <?php if($mensagem != "") { ?>
-            <p style="color:green; font-weight:bold;"><?= $mensagem ?></p>
-        <?php } ?>
-
         <form action="" method="post">
             <label>Nome:</label>
             <input type="text" name="nome" required>
@@ -76,30 +76,34 @@ if(isset($_POST['submit'])){
 
             <label>Sexo:</label>
             <select name="sexo" required>
-                <option value="">Selecione</option>
-                <option value="M">Macho</option>
-                <option value="F">Fêmea</option>
+                <option value="M">M</option>
+                <option value="F">F</option>
             </select>
 
             <label>Peso (kg):</label>
             <input type="number" step="0.01" name="peso" required>
 
             <label>Histórico de Vacinas:</label>
-            <textarea name="historico" rows="4"></textarea>
+            <textarea name="historico"></textarea>
 
             <label>Observações:</label>
-            <textarea name="observacoes" rows="4"></textarea>
+            <textarea name="observacoes"></textarea>
 
             <label>Cliente:</label>
             <select name="cliente_id" required>
-                <option value="">Selecione um cliente</option>
-                <?php while($row = mysqli_fetch_assoc($clientes)) { ?>
+                <?php while($row = mysqli_fetch_assoc($clientes)): ?>
                     <option value="<?= $row['id'] ?>"><?= $row['nome'] ?></option>
-                <?php } ?>
+                <?php endwhile; ?>
             </select>
 
             <input type="submit" name="submit" value="Cadastrar Animal">
         </form>
+
+        <?php if($mensagem != ""): ?>
+        <div id="mensagem" class="mensagem-sucesso <?= $tipo ?>">
+            <?= $mensagem ?>
+        </div>
+        <?php endif; ?>
     </div>
 </section>
 
@@ -108,12 +112,19 @@ if(isset($_POST['submit'])){
 </footer>
 
 <script>
+const msg = document.getElementById('mensagem');
+if(msg){
+    msg.classList.add('show');
+    setTimeout(() => {
+        msg.classList.remove('show');
+    }, 3000);
+}
+
 const menuLinks = document.querySelectorAll('.menu a');
 const menuToggle = document.getElementById('menu-toggle');
 menuLinks.forEach(link => {
     link.addEventListener('click', () => { menuToggle.checked = false; });
 });
 </script>
-
 </body>
 </html>
