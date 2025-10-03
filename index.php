@@ -1,56 +1,57 @@
+<?php
+// index.php
+?>
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VetCare - Cuidado e Dedicação</title>
-    
+    <title>VetCare - Clínica Veterinária</title>
     <link rel="stylesheet" href="style.css">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    
-    <header class="header">
-  <input type="checkbox" id="menu-toggle" hidden>
-  <label for="menu-toggle" class="menu-icon">☰</label>
 
-  <nav class="menu">
-    <ul>
-      <li><a href="#">Home</a></li>
-      <li><a href="#">Serviços</a></li>
-      <li><a href="#">Equipe</a></li>
-      <li><a href="#">Contato</a></li>
-    </ul>
-  </nav>
+<header>
+    <div class="container">
+        <h1>VetCare</h1>
+        <nav>
+            <input type="checkbox" id="menu-toggle">
+            <label for="menu-toggle" class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <ul class="menu">
+                <li><a href="index.php">Home</a></li>
+                <li><a href="cadastro_cliente.php">Clientes</a></li>
+                <li><a href="cadastro_animal.php">Animais</a></li>
+                <li><a href="agendamento.php">Consultas</a></li>
+                <li><a href="relatorios.php">Relatórios</a></li>
+            </ul>
+        </nav>
+    </div>
 </header>
 
+<section id="home">
+    <div class="container">
+        <h2>Bem-vindo à VetCare</h2>
+        <p>Nosso sistema ajuda a gerenciar clientes, animais e consultas de forma simples e eficiente.</p>
+    </div>
+</section>
 
+<footer>
+    <p>© 2025 VetCare - Todos os direitos reservados</p>
+</footer>
 
-
-
-    <section class="home" id="home">
-        <div class="home-content">
-            <h1>Bem-vindo à VetCare</h1>
-            <p>Cuidando do seu melhor amigo com carinho e dedicação ❤️</p>
-        </div>
-    </section>
-
-    <script>
-        let menuIcon = document.querySelector('#menu-icon');
-        let navbar = document.querySelector('#navbar');
-
-        menuIcon.onclick = () => {
-            // Alterna a classe 'active' para abrir/fechar o menu
-            navbar.classList.toggle('active');
-        };
-
-        // Fecha o menu ao clicar em um link (opcional, mas recomendado no mobile)
-        document.querySelectorAll('.navbar a').forEach(link => {
-            link.addEventListener('click', () => {
-                navbar.classList.remove('active');
-            });
+<script>
+    const menuLinks = document.querySelectorAll('.menu a');
+    const menuToggle = document.getElementById('menu-toggle');
+    menuLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            menuToggle.checked = false;
         });
-    </script>
+    });
+</script>
+
 </body>
 </html>

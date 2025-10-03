@@ -1,68 +1,195 @@
-/* HEADER */
-.header {
-  background-color: #007BFF; /* Azul */
-  padding: 15px 30px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  position: relative;
+/* =======================
+   RESET BÁSICO
+======================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* =======================
+   CONTAINER PADRÃO
+======================= */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* =======================
+   CABEÇALHO E MENU
+======================= */
+header {
+  background-color: #007BFF; /* azul */
+  color: #fff;
+  padding: 15px 0;
+}
+
+header .container {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-/* MENU */
-.menu ul {
-  display: flex;
-  gap: 30px;
+header h1 {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+/* Menu */
+nav {
+  position: relative;
+}
+
+nav ul.menu {
   list-style: none;
-  margin: 0;
-  padding: 0;
+  display: flex;
+  gap: 20px;
 }
 
-.menu ul li a {
-  color: white;
+nav ul.menu li a {
+  color: #fff;
   text-decoration: none;
-  font-weight: 500;
-  font-size: 1.1rem;
-  transition: color 0.3s;
+  font-weight: bold;
+  transition: 0.3s;
 }
 
-.menu ul li a:hover {
-  color: #ffd700;
+nav ul.menu li a:hover {
+  text-decoration: underline;
 }
 
-/* MENU HAMBÚRGUER */
-.menu-icon {
+/* Hamburger */
+nav input[type="checkbox"] {
   display: none;
-  font-size: 2rem;
-  cursor: pointer;
-  color: white;
 }
 
-/* RESPONSIVO */
-/* RESPONSIVO */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 5px;
+}
+
+.hamburger span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background: #fff;
+}
+
+/* Responsivo menu */
 @media (max-width: 768px) {
-  .menu ul {
-    display: none;
-    flex-direction: column;
-    background-color: #007BFF;
-    width: 100%;
+  nav ul.menu {
     position: absolute;
     top: 60px;
-    left: 0;
-    padding: 10px 0;
+    right: 0;
+    background: #007BFF;
+    flex-direction: column;
+    width: 200px;
+    display: none;
+    border-radius: 5px;
+    overflow: hidden;
   }
 
-  /* Correção aqui: usamos ~ para pegar o nav.menu */
-  #menu-toggle:checked ~ .menu ul {
+  nav input[type="checkbox"]:checked ~ ul.menu {
     display: flex;
   }
 
-  .menu-icon {
-    display: block;
+  .hamburger {
+    display: flex;
   }
+}
 
-  .menu ul li {
+/* =======================
+   SEÇÕES GERAIS
+======================= */
+section {
+  padding: 40px 0;
+}
+
+section h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 2rem;
+  color: #007BFF;
+}
+
+/* =======================
+   FORMULÁRIOS
+======================= */
+form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px 0;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+form input[type="submit"],
+button {
+  background-color: #007BFF;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+form input[type="submit"]:hover,
+button:hover {
+  background-color: #0056b3;
+}
+
+/* =======================
+   RODAPÉ
+======================= */
+footer {
+  background-color: #007BFF;
+  color: #fff;
+  text-align: center;
+  padding: 15px 0;
+  margin-top: 40px;
+}
+
+.mensagem-sucesso {
+    background-color: #4caf50;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 6px;
+    margin-top: 15px; /* espaço abaixo do form */
     text-align: center;
-    padding: 10px 0;
-  }
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.mensagem-sucesso.show {
+    opacity: 1;
+    transform: translateY(0);
 }
