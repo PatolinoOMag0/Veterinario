@@ -8,6 +8,7 @@ $tipo = "";
 $clientes = mysqli_query($conn, "SELECT id, nome FROM clientes");
 $animais = mysqli_query($conn, "SELECT id, nome FROM animais");
 
+// Verifica se o formulário foi enviado
 if(isset($_POST['submit'])){
     $data = $_POST['data'];
     $hora = $_POST['hora'];
@@ -16,6 +17,7 @@ if(isset($_POST['submit'])){
     $veterinario = $_POST['veterinario'];
     $observacoes = $_POST['observacoes'];
 
+    // Prepara a query para inserir os dados no banco
     $stmt = $conn->prepare("INSERT INTO consultas (data, hora, animal_id, cliente_id, veterinario, observacoes) VALUES (?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("ssiiss", $data, $hora, $animal_id, $cliente_id, $veterinario, $observacoes);
 
@@ -26,6 +28,7 @@ if(isset($_POST['submit'])){
         $mensagem = "Erro ao agendar: " . $stmt->error;
         $tipo = "error";
     }
+    // Fecha a declaração
     $stmt->close();
 }
 ?>

@@ -5,6 +5,7 @@ include 'auth.php';
 $mensagem = "";
 $tipo = "";
 
+// Verifica se o formulário foi enviado
 if(isset($_POST['submit'])){
     $nome = $_POST['nome'];
     $cpf = $_POST['cpf'];
@@ -12,6 +13,7 @@ if(isset($_POST['submit'])){
     $telefone = $_POST['telefone'];
     $email = $_POST['email'];
 
+    // Prepara a query para inserir os dados no banco
     $stmt = $conn->prepare("INSERT INTO clientes (nome, cpf, endereco, telefone, email) VALUES (?, ?, ?, ?, ?)");
     $stmt->bind_param("sssss", $nome, $cpf, $endereco, $telefone, $email);
 
@@ -22,6 +24,7 @@ if(isset($_POST['submit'])){
         $mensagem = "Erro ao cadastrar cliente: " . $stmt->error;
         $tipo = "error";
     }
+    // Fecha a declaração
     $stmt->close();
 }
 ?>

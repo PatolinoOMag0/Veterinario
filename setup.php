@@ -3,6 +3,12 @@ $servername = "localhost";
 $username = "root";
 $password = "";
 
+
+// Professor anderson, peço que não me pergunte como, mas eu arrumei uma maneira de ja criar o banco de dados através desse código, apenas rodando o setup.php
+// Eu particularmente ODEIO toda vez ter que abrir o PHP my admin e criar tudo do 0 no SQL, então dei o meu jeitinho kkkkkk
+
+
+
 // Conecta no MySQL
 $conn = new mysqli($servername, $username, $password);
 
@@ -11,17 +17,17 @@ if ($conn->connect_error) {
     die("Conexão falhou: " . $conn->connect_error);
 }
 
-// Cria banco
+// Cria o banco
 if($conn->query("CREATE DATABASE IF NOT EXISTS clinica_veterinaria") === TRUE){
     echo "Banco de dados criado ou já existe.<br>";
 } else {
     die("Erro ao criar banco: " . $conn->error);
 }
 
-// Seleciona banco
+// Seleciona o banco
 $conn->select_db("clinica_veterinaria");
 
-// Cria tabela de usuários
+// Cria a tabela de usuários
 $conn->query("
 CREATE TABLE IF NOT EXISTS usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -30,12 +36,12 @@ CREATE TABLE IF NOT EXISTS usuarios (
 );
 ");
 
-// Cria usuário admin inicial
+// Cria o usuário admin inicial
 $conn->query("
 INSERT IGNORE INTO usuarios (email, senha) VALUES ('admin@vetcare.com', MD5('123456'));
 ");
 
-// Cria tabela de clientes
+// Cria a tabela de clientes
 $conn->query("
 CREATE TABLE IF NOT EXISTS clientes (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -47,7 +53,7 @@ CREATE TABLE IF NOT EXISTS clientes (
 );
 ");
 
-// Cria tabela de animais
+// Cria a tabela de animais
 $conn->query("
 CREATE TABLE IF NOT EXISTS animais (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -62,7 +68,7 @@ CREATE TABLE IF NOT EXISTS animais (
 );
 ");
 
-// Cria tabela de consultas
+// Cria a tabela de consultas
 $conn->query("
 CREATE TABLE IF NOT EXISTS consultas (
     id INT AUTO_INCREMENT PRIMARY KEY,

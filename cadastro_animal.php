@@ -7,6 +7,7 @@ $tipo = "";
 
 $clientes = mysqli_query($conn, "SELECT id, nome FROM clientes");
 
+// Verifica se o formulário foi enviado
 if(isset($_POST['submit'])){
     $nome = $_POST['nome'];
     $especie = $_POST['especie'];
@@ -17,6 +18,7 @@ if(isset($_POST['submit'])){
     $observacoes = $_POST['observacoes'];
     $cliente_id = $_POST['cliente_id'];
 
+    // Prepara a query para inserir os dados no banco
     $stmt = $conn->prepare("INSERT INTO animais (nome, especie, raca, idade, sexo, peso, observacoes, cliente_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("sssisdsi", $nome, $especie, $raca, $idade, $sexo, $peso, $observacoes, $cliente_id);
 
@@ -27,6 +29,7 @@ if(isset($_POST['submit'])){
         $mensagem = "Erro ao cadastrar animal: " . $stmt->error;
         $tipo = "error";
     }
+    // Fecha a declaração
     $stmt->close();
 }
 ?>
