@@ -14,14 +14,13 @@ if(isset($_POST['submit'])){
     $idade = $_POST['idade'];
     $sexo = $_POST['sexo'];
     $peso = $_POST['peso'];
-    $historico = $_POST['historico'];
     $observacoes = $_POST['observacoes'];
     $cliente_id = $_POST['cliente_id'];
 
-    $sql = "INSERT INTO animais 
-        (nome, especie, raca, idade, sexo, peso, historico_vacinas, observacoes, cliente_id) 
-        VALUES ('$nome','$especie','$raca','$idade','$sexo','$peso','$historico','$observacoes','$cliente_id')";
-    
+    // Corrigido: usa os campos corretos da tabela "animais"
+    $sql = "INSERT INTO animais (nome, especie, raca, idade, sexo, peso, cliente_id)
+            VALUES ('$nome', '$especie', '$raca', '$idade', '$sexo', '$peso', '$cliente_id')";
+
     if(mysqli_query($conn, $sql)){
         $mensagem = "Animal cadastrado com sucesso!";
         $tipo = "success";
@@ -83,9 +82,6 @@ if(isset($_POST['submit'])){
             <label>Peso (kg):</label>
             <input type="number" step="0.01" name="peso" required>
 
-            <label>Histórico de Vacinas:</label>
-            <textarea name="historico"></textarea>
-
             <label>Observações:</label>
             <textarea name="observacoes"></textarea>
 
@@ -107,7 +103,7 @@ if(isset($_POST['submit'])){
     </div>
 </section>
 
-<footer>
+<footer class="footer">
     <p>© 2025 VetCare - Todos os direitos reservados</p>
 </footer>
 

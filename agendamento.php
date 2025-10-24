@@ -6,6 +6,9 @@ include 'auth.php';
 $clientes = mysqli_query($conn, "SELECT id, nome FROM clientes");
 $animais = mysqli_query($conn, "SELECT id, nome FROM animais");
 
+$mensagem = "";
+$tipo = ""; // success ou error
+
 if(isset($_POST['submit'])){
     $data = $_POST['data'];
     $hora = $_POST['hora'];
@@ -17,7 +20,14 @@ if(isset($_POST['submit'])){
     $sql = "INSERT INTO consultas 
         (data, hora, animal_id, cliente_id, veterinario, observacoes) 
         VALUES ('$data','$hora','$animal_id','$cliente_id','$veterinario','$observacoes')";
-    mysqli_query($conn, $sql);
+
+    if(mysqli_query($conn, $sql)){
+        $mensagem = "Agendamento concluído com sucesso!";
+        $tipo = "success";
+    } else {
+        $mensagem = "Erro ao agendar: " . mysqli_error($conn);
+        $tipo = "error";
+    }
 }
 ?>
 
@@ -28,6 +38,32 @@ if(isset($_POST['submit'])){
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agendamento de Consultas - VetCare</title>
 <link rel="stylesheet" href="style.css">
+<style>
+/* Estilo da mensagem de sucesso/erro */
+.mensagem-sucesso, .mensagem-erro {
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.mensagem-sucesso.show, .mensagem-erro.show {
+    opacity: 1;
+}
+
+.mensagem-sucesso.success {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.mensagem-erro.error {
+    background-color: #e74c3c;
+    color: white;
+}
+</style>
 </head>
 <body>
 
@@ -82,14 +118,30 @@ if(isset($_POST['submit'])){
 
             <input type="submit" name="submit" value="Agendar Consulta">
         </form>
+
+        <?php if($mensagem != ""): ?>
+        <div id="mensagem" class="mensagem-sucesso <?= $tipo ?>">
+            <?= $mensagem ?>
+        </div>
+        <?php endif; ?>
     </div>
 </section>
 
-<footer>
+<footer class="footer">
     <p>© 2025 VetCare - Todos os direitos reservados</p>
 </footer>
 
 <script>
+// Mostra e some a mensagem com animação
+const msg = document.getElementById('mensagem');
+if(msg){
+    msg.classList.add('show');
+    setTimeout(() => {
+        msg.classList.remove('show');
+    }, 3000);
+}
+
+// Fecha menu ao clicar em um link (modo responsivo)
 const menuLinks = document.querySelectorAll('.menu a');
 const menuToggle = document.getElementById('menu-toggle');
 menuLinks.forEach(link => {

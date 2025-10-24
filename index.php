@@ -28,8 +28,10 @@
     <div class="container">
         <h2>Bem-vindo ao VetCare</h2>
         <p>Bem vindo ao meu trabalho do 4º Bimestre: Criar uma página de veterinário.</p>
-        <p>Sinceramente eu queria muito fazer a Etecflix kkkk, tava com umas ideias boas, mas estou orgulhoso do meu resultado nessa página de veterinária!</p>
-        <p>Até que eu to gostando desse curso de informática, sem necessidade nenhuma esses comentarios, só queria cobrir o vazio que tava nesse espaço kkkkk.</p>  
+        <p>Sinceramente eu queria muito fazer a Etecflix kkkk, estava com umas ideias boas, mas estou orgulhoso do meu resultado nessa página de veterinário</p>
+        <p>Até que eu to gostando desse curso de informática, sem necessidade nenhuma esses comentarios, só queria cobrir o vazio que tava nesse espaço kkkkk.</p>
+        <p>Confesso que de início eu fiz a prova da Etec por fazer, não estava esperando passar, e hoje eu tô aprendendo muita coisa nova, muita coisa interessante.</p>
+        <p>A área de informática é uma área que está se expandindo muito rapidamente na minha visão, e sinceramente não acho que vai demorar muito para alcançar meus objetivos e sonhos nesse ritmo.</p>
     </div>
 </section>
 

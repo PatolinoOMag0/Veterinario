@@ -79,7 +79,7 @@ if(isset($_POST['submit'])){
     </div>
 </section>
 
-<footer>
+<footer class="footer">
     <p>© 2025 VetCare - Todos os direitos reservados</p>
 </footer>
 

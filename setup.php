@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS clientes (
 );
 ");
 
-// Cria tabela de animais
+// Cria tabela de animais (corrigida)
 $conn->query("
 CREATE TABLE IF NOT EXISTS animais (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -57,7 +57,9 @@ CREATE TABLE IF NOT EXISTS animais (
     idade INT,
     sexo VARCHAR(10),
     peso DECIMAL(5,2),
-    cliente_id INT
+    cliente_id INT,
+    historico_vacinas TEXT,
+    FOREIGN KEY (cliente_id) REFERENCES clientes(id)
 );
 ");
 
@@ -74,7 +76,7 @@ CREATE TABLE IF NOT EXISTS consultas (
 );
 ");
 
-echo "<br>Tabelas criadas com sucesso!<br>";
+echo "<br>Tabelas criadas/corrigidas com sucesso!<br>";
 echo "<br><a href='login.php'>Ir para login</a>";
 
 $conn->close();
