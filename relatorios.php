@@ -2,13 +2,46 @@
 include 'includes/db_connect.php';
 include 'auth.php';
 
-// Deletar consulta se botão for clicado
-if(isset($_POST['finalizar']) && isset($_POST['consulta_id'])){
-    $id = $_POST['consulta_id'];
-    mysqli_query($conn, "DELETE FROM consultas WHERE id = $id");
+$mensagem = "";
+$tipo = "";
+
+// Remover cliente
+if(isset($_GET['delete_cliente'])){
+    $id = intval($_GET['delete_cliente']);
+    if(mysqli_query($conn, "DELETE FROM clientes WHERE id=$id")){
+        $mensagem = "Cliente removido com sucesso!";
+        $tipo = "success";
+    } else {
+        $mensagem = "Erro ao remover cliente: " . mysqli_error($conn);
+        $tipo = "error";
+    }
 }
 
-// Pegar clientes, animais e consultas
+// Remover animal
+if(isset($_GET['delete_animal'])){
+    $id = intval($_GET['delete_animal']);
+    if(mysqli_query($conn, "DELETE FROM animais WHERE id=$id")){
+        $mensagem = "Animal removido com sucesso!";
+        $tipo = "success";
+    } else {
+        $mensagem = "Erro ao remover animal: " . mysqli_error($conn);
+        $tipo = "error";
+    }
+}
+
+// Marcar consulta como realizada
+if(isset($_GET['concluida'])){
+    $id = intval($_GET['concluida']);
+    if(mysqli_query($conn, "DELETE FROM consultas WHERE id=$id")){
+        $mensagem = "Consulta concluída!";
+        $tipo = "success";
+    } else {
+        $mensagem = "Erro ao concluir consulta: " . mysqli_error($conn);
+        $tipo = "error";
+    }
+}
+
+// Pegar dados
 $clientes = mysqli_query($conn, "SELECT * FROM clientes");
 $animais = mysqli_query($conn, "SELECT * FROM animais");
 $consultas = mysqli_query($conn, "SELECT * FROM consultas");
@@ -22,166 +55,165 @@ $consultas = mysqli_query($conn, "SELECT * FROM consultas");
 <title>Relatórios - VetCare</title>
 <link rel="stylesheet" href="style.css">
 <style>
-.container h2, .container h3 {
-    text-align: center;
-    color: #2c3e50;
-    margin-bottom: 15px;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 30px;
-}
-
-table th, table td {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: center;
-}
-
-table th {
-    background-color: #3498db;
-    color: white;
-}
-
-table tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-section {
-    padding: 20px 0;
-}
-
-button.finalizar {
-    background-color: #2ecc71;
-    color: white;
+/* Botões bonitos */
+.btn-remover, .btn-concluida {
+    display: inline-block;
+    padding: 5px 12px;
+    color: #fff;
     border: none;
-    padding: 5px 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.3s;
 }
 
-button.finalizar:hover {
+.btn-remover {
+    background-color: #e74c3c;
+}
+
+.btn-remover:hover {
+    background-color: #c0392b;
+    cursor: pointer;
+}
+
+.btn-concluida {
     background-color: #27ae60;
+}
+
+.btn-concluida:hover {
+    background-color: #1e8449;
+    cursor: pointer;
 }
 </style>
 </head>
 <body>
-
 <header>
-    <div class="container">
-        <h1>VetCare</h1>
-        <nav>
-            <input type="checkbox" id="menu-toggle">
-            <label for="menu-toggle" class="hamburger"><span></span><span></span><span></span></label>
-            <ul class="menu">
-                <li><a href="index.php">Home</a></li>
-                <li><a href="cadastro_cliente.php">Clientes</a></li>
-                <li><a href="cadastro_animal.php">Animais</a></li>
-                <li><a href="agendamento.php">Consultas</a></li>
-                <li><a href="relatorios.php">Relatórios</a></li>
-            </ul>
-        </nav>
-    </div>
+<div class="container">
+<h1>VetCare</h1>
+<nav>
+<input type="checkbox" id="menu-toggle">
+<label for="menu-toggle" class="hamburger"><span></span><span></span><span></span></label>
+<ul class="menu">
+<li><a href="index.php">Home</a></li>
+<li><a href="cadastro_cliente.php">Clientes</a></li>
+<li><a href="cadastro_animal.php">Animais</a></li>
+<li><a href="agendamento.php">Consultas</a></li>
+<li><a href="relatorios.php">Relatórios</a></li>
+</ul>
+</nav>
+</div>
 </header>
 
 <section>
-    <div class="container">
-        <h2>Relatórios</h2>
+<div class="container">
 
-        <h3>Clientes</h3>
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>CPF</th>
-                <th>Endereço</th>
-                <th>Telefone</th>
-                <th>Email</th>
-            </tr>
-            <?php while($row = mysqli_fetch_assoc($clientes)): ?>
-            <tr>
-                <td><?= $row['id'] ?></td>
-                <td><?= $row['nome'] ?></td>
-                <td><?= $row['cpf'] ?></td>
-                <td><?= $row['endereco'] ?></td>
-                <td><?= $row['telefone'] ?></td>
-                <td><?= $row['email'] ?></td>
-            </tr>
-            <?php endwhile; ?>
-        </table>
+<h3>Clientes</h3>
+<table>
+<tr>
+<th>ID</th>
+<th>Nome</th>
+<th>CPF</th>
+<th>Endereço</th>
+<th>Telefone</th>
+<th>Email</th>
+<th>Ação</th>
+</tr>
+<?php while($row = mysqli_fetch_assoc($clientes)): ?>
+<tr>
+<td><?= $row['id'] ?></td>
+<td><?= $row['nome'] ?></td>
+<td><?= $row['cpf'] ?></td>
+<td><?= $row['endereco'] ?></td>
+<td><?= $row['telefone'] ?></td>
+<td><?= $row['email'] ?></td>
+<td>
+<a href="?delete_cliente=<?= $row['id'] ?>" class="btn-remover" onclick="return confirm('Tem certeza que deseja remover este cliente?');">Remover</a>
+</td>
+</tr>
+<?php endwhile; ?>
+</table>
 
-        <h3>Animais</h3>
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>Espécie</th>
-                <th>Raça</th>
-                <th>Idade</th>
-                <th>Sexo</th>
-                <th>Peso</th>
-                <th>Cliente ID</th>
-            </tr>
-            <?php while($row = mysqli_fetch_assoc($animais)): ?>
-            <tr>
-                <td><?= $row['id'] ?></td>
-                <td><?= $row['nome'] ?></td>
-                <td><?= $row['especie'] ?></td>
-                <td><?= $row['raca'] ?></td>
-                <td><?= $row['idade'] ?></td>
-                <td><?= $row['sexo'] ?></td>
-                <td><?= $row['peso'] ?></td>
-                <td><?= $row['cliente_id'] ?></td>
-            </tr>
-            <?php endwhile; ?>
-        </table>
+<h3>Animais</h3>
+<table>
+<tr>
+<th>ID</th>
+<th>Nome</th>
+<th>Espécie</th>
+<th>Raça</th>
+<th>Idade</th>
+<th>Sexo</th>
+<th>Peso</th>
+<th>Dono</th>
+<th>Ação</th>
+</tr>
+<?php while($row = mysqli_fetch_assoc($animais)): ?>
+<tr>
+<td><?= $row['id'] ?></td>
+<td><?= $row['nome'] ?></td>
+<td><?= $row['especie'] ?></td>
+<td><?= $row['raca'] ?></td>
+<td><?= $row['idade'] ?></td>
+<td><?= $row['sexo'] ?></td>
+<td><?= $row['peso'] ?></td>
+<td><?= $row['cliente_id'] ?></td>
+<td>
+<a href="?delete_animal=<?= $row['id'] ?>" class="btn-remover" onclick="return confirm('Tem certeza que deseja remover este animal?');">Remover</a>
+</td>
+</tr>
+<?php endwhile; ?>
+</table>
 
-        <h3>Consultas</h3>
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Data</th>
-                <th>Hora</th>
-                <th>Animal ID</th>
-                <th>Cliente ID</th>
-                <th>Veterinário</th>
-                <th>Observações</th>
-                <th>Ação</th>
-            </tr>
-            <?php while($row = mysqli_fetch_assoc($consultas)): ?>
-            <tr>
-                <td><?= $row['id'] ?></td>
-                <td><?= $row['data'] ?></td>
-                <td><?= $row['hora'] ?></td>
-                <td><?= $row['animal_id'] ?></td>
-                <td><?= $row['cliente_id'] ?></td>
-                <td><?= $row['veterinario'] ?></td>
-                <td><?= $row['observacoes'] ?></td>
-                <td>
-                    <form method="post" style="margin:0;">
-                        <input type="hidden" name="consulta_id" value="<?= $row['id'] ?>">
-                        <button type="submit" name="finalizar" class="finalizar">Consulta Realizada</button>
-                    </form>
-                </td>
-            </tr>
-            <?php endwhile; ?>
-        </table>
-    </div>
+<h3>Consultas</h3>
+<table>
+<tr>
+<th>ID</th>
+<th>Data</th>
+<th>Hora</th>
+<th>Animal</th>
+<th>Cliente</th>
+<th>Veterinário</th>
+<th>Observações</th>
+<th>Ação</th>
+</tr>
+<?php while($row = mysqli_fetch_assoc($consultas)): ?>
+<tr>
+<td><?= $row['id'] ?></td>
+<td><?= $row['data'] ?></td>
+<td><?= $row['hora'] ?></td>
+<td><?= $row['animal_id'] ?></td>
+<td><?= $row['cliente_id'] ?></td>
+<td><?= $row['veterinario'] ?></td>
+<td><?= $row['observacoes'] ?></td>
+<td>
+<a href="?concluida=<?= $row['id'] ?>" class="btn-concluida" onclick="return confirm('Marcar consulta como concluída?');">Consulta realizada</a>
+</td>
+</tr>
+<?php endwhile; ?>
+</table>
+
+<?php if($mensagem != ""): ?>
+<div id="mensagem" class="mensagem-sucesso <?= $tipo ?>">
+<?= $mensagem ?>
+</div>
+<?php endif; ?>
+
+</div>
 </section>
 
 <footer class="footer">
-    <p>© 2025 VetCare - Todos os direitos reservados</p>
+<p>© 2025 VetCare - Todos os direitos reservados</p>
 </footer>
 
 <script>
+const msg = document.getElementById('mensagem');
+if(msg){
+    msg.classList.add('show');
+    setTimeout(() => { msg.classList.remove('show'); }, 3000);
+}
+
 const menuLinks = document.querySelectorAll('.menu a');
 const menuToggle = document.getElementById('menu-toggle');
-menuLinks.forEach(link => {
-    link.addEventListener('click', () => { menuToggle.checked = false; });
-});
+menuLinks.forEach(link => { link.addEventListener('click', () => { menuToggle.checked = false; }); });
 </script>
 </body>
 </html>

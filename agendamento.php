@@ -2,12 +2,11 @@
 include 'includes/db_connect.php';
 include 'auth.php';
 
-// Pega lista de clientes e animais
+$mensagem = "";
+$tipo = "";
+
 $clientes = mysqli_query($conn, "SELECT id, nome FROM clientes");
 $animais = mysqli_query($conn, "SELECT id, nome FROM animais");
-
-$mensagem = "";
-$tipo = ""; // success ou error
 
 if(isset($_POST['submit'])){
     $data = $_POST['data'];
@@ -17,17 +16,17 @@ if(isset($_POST['submit'])){
     $veterinario = $_POST['veterinario'];
     $observacoes = $_POST['observacoes'];
 
-    $sql = "INSERT INTO consultas 
-        (data, hora, animal_id, cliente_id, veterinario, observacoes) 
-        VALUES ('$data','$hora','$animal_id','$cliente_id','$veterinario','$observacoes')";
+    $stmt = $conn->prepare("INSERT INTO consultas (data, hora, animal_id, cliente_id, veterinario, observacoes) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssiiss", $data, $hora, $animal_id, $cliente_id, $veterinario, $observacoes);
 
-    if(mysqli_query($conn, $sql)){
-        $mensagem = "Agendamento concluído com sucesso!";
+    if($stmt->execute()){
+        $mensagem = "Agendamento concluído!";
         $tipo = "success";
     } else {
-        $mensagem = "Erro ao agendar: " . mysqli_error($conn);
+        $mensagem = "Erro ao agendar: " . $stmt->error;
         $tipo = "error";
     }
+    $stmt->close();
 }
 ?>
 
@@ -36,118 +35,85 @@ if(isset($_POST['submit'])){
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agendamento de Consultas - VetCare</title>
+<title>Agendamento - VetCare</title>
 <link rel="stylesheet" href="style.css">
-<style>
-/* Estilo da mensagem de sucesso/erro */
-.mensagem-sucesso, .mensagem-erro {
-    text-align: center;
-    margin-top: 20px;
-    padding: 10px;
-    border-radius: 10px;
-    font-weight: bold;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-}
-
-.mensagem-sucesso.show, .mensagem-erro.show {
-    opacity: 1;
-}
-
-.mensagem-sucesso.success {
-    background-color: #2ecc71;
-    color: white;
-}
-
-.mensagem-erro.error {
-    background-color: #e74c3c;
-    color: white;
-}
-</style>
 </head>
 <body>
-
 <header>
-    <div class="container">
-        <h1>VetCare</h1>
-        <nav>
-            <input type="checkbox" id="menu-toggle">
-            <label for="menu-toggle" class="hamburger"><span></span><span></span><span></span></label>
-            <ul class="menu">
-                <li><a href="index.php">Home</a></li>
-                <li><a href="cadastro_cliente.php">Clientes</a></li>
-                <li><a href="cadastro_animal.php">Animais</a></li>
-                <li><a href="agendamento.php">Consultas</a></li>
-                <li><a href="relatorios.php">Relatórios</a></li>
-            </ul>
-        </nav>
-    </div>
+<div class="container">
+<h1>VetCare</h1>
+<nav>
+<input type="checkbox" id="menu-toggle">
+<label for="menu-toggle" class="hamburger"><span></span><span></span><span></span></label>
+<ul class="menu">
+<li><a href="index.php">Home</a></li>
+<li><a href="cadastro_cliente.php">Clientes</a></li>
+<li><a href="cadastro_animal.php">Animais</a></li>
+<li><a href="agendamento.php">Consultas</a></li>
+<li><a href="relatorios.php">Relatórios</a></li>
+</ul>
+</nav>
+</div>
 </header>
 
 <section>
-    <div class="container">
-        <h2>Agendamento de Consultas</h2>
-        <form action="" method="post">
-            <label>Data:</label>
-            <input type="date" name="data" required>
+<div class="container">
+<h2>Agendamento de Consultas</h2>
+<form action="" method="post">
+<label>Data:</label>
+<input type="date" name="data" required>
 
-            <label>Hora:</label>
-            <input type="time" name="hora" required>
+<label>Hora:</label>
+<input type="time" name="hora" required>
 
-            <label>Animal:</label>
-            <select name="animal_id" required>
-                <option value="">Selecione um animal</option>
-                <?php while($row = mysqli_fetch_assoc($animais)) { ?>
-                    <option value="<?= $row['id'] ?>"><?= $row['nome'] ?></option>
-                <?php } ?>
-            </select>
+<label>Animal:</label>
+<select name="animal_id" required>
+<option value="">Selecione um animal</option>
+<?php while($row = mysqli_fetch_assoc($animais)): ?>
+<option value="<?= $row['id'] ?>"><?= $row['nome'] ?></option>
+<?php endwhile; ?>
+</select>
 
-            <label>Cliente:</label>
-            <select name="cliente_id" required>
-                <option value="">Selecione um cliente</option>
-                <?php while($row = mysqli_fetch_assoc($clientes)) { ?>
-                    <option value="<?= $row['id'] ?>"><?= $row['nome'] ?></option>
-                <?php } ?>
-            </select>
+<label>Cliente:</label>
+<select name="cliente_id" required>
+<option value="">Selecione um cliente</option>
+<?php while($row = mysqli_fetch_assoc($clientes)): ?>
+<option value="<?= $row['id'] ?>"><?= $row['nome'] ?></option>
+<?php endwhile; ?>
+</select>
 
-            <label>Veterinário:</label>
-            <input type="text" name="veterinario" required>
+<label>Veterinário:</label>
+<input type="text" name="veterinario" required>
 
-            <label>Observações:</label>
-            <textarea name="observacoes" rows="4"></textarea>
+<label>Observações:</label>
+<textarea name="observacoes"></textarea>
 
-            <input type="submit" name="submit" value="Agendar Consulta">
-        </form>
+<input type="submit" name="submit" value="Agendar Consulta">
+</form>
 
-        <?php if($mensagem != ""): ?>
-        <div id="mensagem" class="mensagem-sucesso <?= $tipo ?>">
-            <?= $mensagem ?>
-        </div>
-        <?php endif; ?>
-    </div>
+<?php if($mensagem != ""): ?>
+<div id="mensagem" class="mensagem-sucesso <?= $tipo ?>">
+<?= $mensagem ?>
+</div>
+<?php endif; ?>
+
+</div>
 </section>
 
 <footer class="footer">
-    <p>© 2025 VetCare - Todos os direitos reservados</p>
+<p>© 2025 VetCare - Todos os direitos reservados</p>
 </footer>
 
 <script>
-// Mostra e some a mensagem com animação
 const msg = document.getElementById('mensagem');
 if(msg){
     msg.classList.add('show');
-    setTimeout(() => {
-        msg.classList.remove('show');
-    }, 3000);
+    setTimeout(() => { msg.classList.remove('show'); }, 3000);
 }
 
-// Fecha menu ao clicar em um link (modo responsivo)
 const menuLinks = document.querySelectorAll('.menu a');
 const menuToggle = document.getElementById('menu-toggle');
-menuLinks.forEach(link => {
-    link.addEventListener('click', () => { menuToggle.checked = false; });
-});
+menuLinks.forEach(link => { link.addEventListener('click', () => { menuToggle.checked = false; }); });
 </script>
-
 </body>
 </html>
