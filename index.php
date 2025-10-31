@@ -25,15 +25,32 @@
 </header>
 
 <section>
-    <div class="container">
-        <h2>Bem-vindo ao VetCare</h2>
-        <p>Bem vindo ao meu trabalho do 4º Bimestre: Criar uma página de veterinário.</p>
-        <p>Sinceramente eu queria muito fazer a Etecflix kkkk, estava com umas ideias boas, mas estou orgulhoso do meu resultado nessa página de veterinário</p>
-        <p>Até que eu to gostando desse curso de informática, sem necessidade nenhuma esses comentarios, só queria cobrir o vazio que tava nesse espaço kkkkk.</p>
-        <p>Confesso que de início eu fiz a prova da Etec por fazer, não estava esperando passar, e hoje eu tô aprendendo muita coisa nova, muita coisa interessante.</p>
-        <p>A área de informática é uma área que está se expandindo muito rapidamente na minha visão, e sinceramente não acho que vai demorar muito para alcançar meus objetivos e sonhos nesse ritmo.</p>
-    </div>
+  <div class="container">
+    <h2>Seu pet merece o melhor — e a gente cuida disso</h2>
+    <p>Na <strong>Clínica Veterinária Patolina</strong>, acreditamos que o cuidado com os animais vai muito além do atendimento: envolve carinho, atenção e compromisso em cada detalhe. Nossa missão é garantir qualidade de vida e bem-estar para o seu melhor amigo, oferecendo atendimento completo com profissionais apaixonados por pets.</p>
+
+    <p>Contamos com uma equipe experiente e equipamentos modernos para oferecer diagnósticos rápidos e tratamentos eficazes. Aqui, cada paciente é tratado com respeito, dedicação e aquele toque de amor que faz toda a diferença.</p>
+
+    <h3>Nossos principais serviços</h3>
+    <ul>
+    <p>🐾 Consultas de rotina e check-ups completos</p>
+    <p>💉 Vacinação e controle de parasitas</p>
+    <p>🩺 Exames laboratoriais e diagnósticos por imagem</p>
+    <p>⚕️ Cirurgias com monitoramento seguro</p>
+    <p>🍖 Nutrição e acompanhamento de peso</p>
+    <p>❤️ Atendimento emergencial e cuidados intensivos</p>
+    </ul>
+
+    <h3>Seu pet em boas mãos</h3>
+    <p>Seja para uma simples vacina, um exame detalhado ou uma consulta de emergência, estamos prontos para cuidar do seu companheiro com o máximo de atenção. Na Patolino, cada pet é tratado como parte da nossa família.</p>
+
+    <p><strong>Agende uma visita</strong> e descubra porque somos referência em cuidado, confiança e amor pelos animais.</p>
+
+    <a href="cadastro_cliente.php" class="btn">Agendar Agora</a><br>
+
+  </div>
 </section>
+
 
 <footer class="footer">
     <p>© 2025 VetCare - Todos os direitos reservados</p>

@@ -12,6 +12,9 @@ if(isset($_POST['submit'])){
     $endereco = $_POST['endereco'];
     $telefone = $_POST['telefone'];
     $email = $_POST['email'];
+    echo '<p style="color:green; font-weight:bold; margin-top:10px;">Cliente cadastrado com sucesso!</p>';
+    echo '<a href="cadastro_animal.php" class="btn-cadastrar-animal">Cadastrar Animal</a>';
+
 
     // Prepara a query para inserir os dados no banco
     $stmt = $conn->prepare("INSERT INTO clientes (nome, cpf, endereco, telefone, email) VALUES (?, ?, ?, ?, ?)");
