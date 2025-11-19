@@ -1,53 +1,76 @@
 <?php
 session_start();
-include 'includes/db_connect.php';
+require 'conexao.php'; // conexão central
 
 $erro = "";
 $mensagem = "";
 
-// Login
-if(isset($_POST['login'])){
-    $email = $_POST['email'];
-    $senha = $_POST['senha'];
-
-    $stmt = $conn->prepare("SELECT * FROM usuarios WHERE email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $usuario = $result->fetch_assoc();
-    $stmt->close();
-
-    if($usuario && password_verify($senha, $usuario['senha'])){
-        $_SESSION['usuario_id'] = $usuario['id'];
-        header('Location: index.php');
-        exit;
-    } else {
-        $erro = "Email ou senha incorretos.";
-    }
+// SANITIZAÇÃO DE INPUT
+function limpar($dado){
+    return htmlspecialchars(trim($dado));
 }
 
-// Cadastro
+// LOGIN
+if(isset($_POST['login'])){
+    $email = limpar($_POST['email']);
+    $senha = limpar($_POST['senha']);
+
+    $stmt = $conn->prepare("SELECT id, email, senha FROM usuarios WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+
+    if($resultado->num_rows === 1){
+        $usuario = $resultado->fetch_assoc();
+
+        if(password_verify($senha, $usuario['senha'])){
+            // REGERA ID DA SESSÃO PARA SEGURANÇA
+            session_regenerate_id(true);
+
+            $_SESSION['usuario_id'] = $usuario['id'];
+            $_SESSION['usuario_email'] = $usuario['email'];
+
+            header("Location: index.php");
+            exit;
+        } else {
+            $erro = "Senha incorreta.";
+        }
+    } else {
+        $erro = "Email não encontrado.";
+    }
+
+    $stmt->close();
+}
+
+
+// CADASTRO
 if(isset($_POST['cadastrar'])){
-    $email = $_POST['email'];
-    $senha = $_POST['senha'];
+    $email = limpar($_POST['email']);
+    $senha = limpar($_POST['senha']);
     $hashSenha = password_hash($senha, PASSWORD_DEFAULT);
 
+    // Verifica se já existe o e-mail
     $stmt = $conn->prepare("SELECT id FROM usuarios WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
-    $result = $stmt->get_result();
-    if($result->num_rows > 0){
-        $mensagem = "Email já cadastrado!";
+    $resultado = $stmt->get_result();
+
+    if($resultado->num_rows > 0){
+        $mensagem = "Este email já está cadastrado!";
     } else {
         $stmt->close();
+
+        // Inserir novo usuário
         $stmt = $conn->prepare("INSERT INTO usuarios (email, senha) VALUES (?, ?)");
         $stmt->bind_param("ss", $email, $hashSenha);
+
         if($stmt->execute()){
-            $mensagem = "Cadastro realizado com sucesso! Agora faça login.";
+            $mensagem = "Usuário cadastrado com sucesso! Faça login.";
         } else {
             $mensagem = "Erro ao cadastrar usuário: " . $stmt->error;
         }
     }
+
     $stmt->close();
 }
 ?>
@@ -59,6 +82,7 @@ if(isset($_POST['cadastrar'])){
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login - VetCare</title>
 <link rel="stylesheet" href="style.css">
+
 <style>
 .container { max-width:400px; margin:auto; padding-top:50px; }
 .btn-group { display:flex; justify-content: space-between; margin-top:10px; }
@@ -68,9 +92,12 @@ if(isset($_POST['cadastrar'])){
 </style>
 </head>
 <body>
+
 <section>
     <div class="container">
         <h2>Login</h2>
+
+        <!-- Formulário de Login -->
         <form id="loginForm" method="post">
             <label>Email:</label>
             <input type="email" name="email" required>
@@ -84,6 +111,7 @@ if(isset($_POST['cadastrar'])){
             </div>
         </form>
 
+        <!-- Formulário de Cadastro -->
         <form id="cadastroForm" method="post" style="display:none; margin-top:20px;">
             <label>Email:</label>
             <input type="email" name="email" required>
@@ -95,6 +123,7 @@ if(isset($_POST['cadastrar'])){
             <button type="button" id="voltarLogin">Voltar</button>
         </form>
 
+        <!-- Exibição das mensagens -->
         <?php if($erro != ""): ?>
         <div id="mensagem" class="mensagem erro">
             <?= $erro ?>
@@ -106,14 +135,12 @@ if(isset($_POST['cadastrar'])){
             <?= $mensagem ?>
         </div>
         <?php endif; ?>
+
     </div>
 </section>
 
 <script>
 // Alterna entre login e cadastro
-const loginForm = document.getElementById('loginForm');
-const cadastroForm = document.getElementById('cadastroForm');
-
 document.getElementById('showCadastro').addEventListener('click', () => {
     loginForm.style.display = 'none';
     cadastroForm.style.display = 'block';
@@ -127,9 +154,9 @@ document.getElementById('voltarLogin').addEventListener('click', () => {
 // Mensagem desaparece em 3s
 const msg = document.getElementById('mensagem');
 if(msg){
-    msg.classList.add('show');
-    setTimeout(() => { msg.classList.remove('show'); }, 3000);
+    setTimeout(() => msg.remove(), 3000);
 }
 </script>
+
 </body>
 </html>

@@ -1,126 +1,43 @@
-<?php
-include 'includes/db_connect.php';
-include 'auth.php';
+<?php 
+require 'auth_check.php';
+require 'conexao.php';
 
-$mensagem = "";
-$tipo = "";
+// Cadastrar animal
+if($_SERVER["REQUEST_METHOD"] === "POST"){
+    $nome = htmlspecialchars($_POST['nome']);
+    $especie = htmlspecialchars($_POST['especie']);
+    $raca = htmlspecialchars($_POST['raca']);
+    $idade = intval($_POST['idade']);
+    $sexo = htmlspecialchars($_POST['sexo']);
+    $peso = floatval($_POST['peso']);
+    $cliente_id = intval($_POST['cliente_id']);
+    $obs = htmlspecialchars($_POST['observacoes']);
 
-$clientes = mysqli_query($conn, "SELECT id, nome FROM clientes");
-
-// Verifica se o formulário foi enviado
-if(isset($_POST['submit'])){
-    $nome = $_POST['nome'];
-    $especie = $_POST['especie'];
-    $raca = $_POST['raca'];
-    $idade = $_POST['idade'];
-    $sexo = $_POST['sexo'];
-    $peso = $_POST['peso'];
-    $observacoes = $_POST['observacoes'];
-    $cliente_id = $_POST['cliente_id'];
-
-    // Prepara a query para inserir os dados no banco
-    $stmt = $conn->prepare("INSERT INTO animais (nome, especie, raca, idade, sexo, peso, observacoes, cliente_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssisdsi", $nome, $especie, $raca, $idade, $sexo, $peso, $observacoes, $cliente_id);
-
-    if($stmt->execute()){
-        $mensagem = "Animal cadastrado com sucesso!";
-        $tipo = "success";
-    } else {
-        $mensagem = "Erro ao cadastrar animal: " . $stmt->error;
-        $tipo = "error";
-    }
-    // Fecha a declaração
+    $stmt = $conn->prepare("INSERT INTO animais (nome, especie, raca, idade, sexo, peso, cliente_id, observacoes) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssisdiss", $nome, $especie, $raca, $idade, $sexo, $peso, $cliente_id, $obs);
+    $stmt->execute();
     $stmt->close();
+
+    header("Location: listar_animais.php?sucesso=1");
+    exit;
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cadastro de Animais - VetCare</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<header>
-<div class="container">
-<h1>VetCare</h1>
-<nav>
-<input type="checkbox" id="menu-toggle">
-<label for="menu-toggle" class="hamburger"><span></span><span></span><span></span></label>
-<ul class="menu">
-<li><a href="index.php">Home</a></li>
-<li><a href="cadastro_cliente.php">Clientes</a></li>
-<li><a href="cadastro_animal.php">Animais</a></li>
-<li><a href="agendamento.php">Consultas</a></li>
-<li><a href="relatorios.php">Relatórios</a></li>
-</ul>
-</nav>
-</div>
-</header>
+<?php include 'header.php'; ?>
 
-<section>
-<div class="container">
-<h2>Cadastro de Animais</h2>
-<form action="" method="post">
-<label>Nome:</label>
-<input type="text" name="nome" required>
-
-<label>Espécie:</label>
-<input type="text" name="especie" required>
-
-<label>Raça:</label>
-<input type="text" name="raca" required>
-
-<label>Idade:</label>
-<input type="number" name="idade" required>
-
-<label>Sexo:</label>
-<select name="sexo" required>
-<option value="M">M</option>
-<option value="F">F</option>
-</select>
-
-<label>Peso (kg):</label>
-<input type="number" step="0.01" name="peso" required>
-
-<label>Observações:</label>
-<textarea name="observacoes"></textarea>
-
-<label>Cliente:</label>
-<select name="cliente_id" required>
-<?php while($row = mysqli_fetch_assoc($clientes)): ?>
-<option value="<?= $row['id'] ?>"><?= $row['nome'] ?></option>
-<?php endwhile; ?>
-</select>
-
-<input type="submit" name="submit" value="Cadastrar Animal">
+<h2>Cadastrar Animal</h2>
+<form method="post">
+    Nome: <input type="text" name="nome" required><br>
+    Espécie: <input type="text" name="especie" required><br>
+    Raça: <input type="text" name="raca"><br>
+    Idade: <input type="number" name="idade"><br>
+    Sexo: <input type="text" name="sexo"><br>
+    Peso: <input type="number" step="0.01" name="peso"><br>
+    ID do Dono (cliente): <input type="number" name="cliente_id" required><br>
+    Observações:<br>
+    <textarea name="observacoes"></textarea><br>
+    <button type="submit">Cadastrar</button>
 </form>
 
-<?php if($mensagem != ""): ?>
-<div id="mensagem" class="mensagem-sucesso <?= $tipo ?>">
-<?= $mensagem ?>
-</div>
-<?php endif; ?>
-
-</div>
-</section>
-
-<footer class="footer">
-<p>© 2025 VetCare - Todos os direitos reservados</p>
-</footer>
-
-<script>
-const msg = document.getElementById('mensagem');
-if(msg){
-    msg.classList.add('show');
-    setTimeout(() => { msg.classList.remove('show'); }, 3000);
-}
-
-const menuLinks = document.querySelectorAll('.menu a');
-const menuToggle = document.getElementById('menu-toggle');
-menuLinks.forEach(link => { link.addEventListener('click', () => { menuToggle.checked = false; }); });
-</script>
-</body>
-</html>
+<?php include 'footer.php'; ?>

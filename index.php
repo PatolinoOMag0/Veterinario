@@ -1,28 +1,11 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home - VetCare</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<header>
-    <div class="container">
-        <h1>VetCare</h1>
-        <nav>
-            <input type="checkbox" id="menu-toggle">
-            <label for="menu-toggle" class="hamburger"><span></span><span></span><span></span></label>
-            <ul class="menu">
-                <li><a href="index.php">Home</a></li>
-                <li><a href="cadastro_cliente.php">Clientes</a></li>
-                <li><a href="cadastro_animal.php">Animais</a></li>
-                <li><a href="agendamento.php">Consultas</a></li>
-                <li><a href="relatorios.php">Relatórios</a></li>
-            </ul>
-        </nav>
-    </div>
-</header>
+<?php 
+// Proteção: só acessa se estiver logado
+require 'auth_check.php'; 
+?>
+
+<?php include 'header.php'; ?>
+<!-- O HEADER ORIGINAL FOI MOVIDO PARA header.php -->
+
 
 <section>
   <div class="container">
@@ -33,12 +16,12 @@
 
     <h3>Nossos principais serviços</h3>
     <ul>
-    <p>🐾 Consultas de rotina e check-ups completos</p>
-    <p>💉 Vacinação e controle de parasitas</p>
-    <p>🩺 Exames laboratoriais e diagnósticos por imagem</p>
-    <p>⚕️ Cirurgias com monitoramento seguro</p>
-    <p>🍖 Nutrição e acompanhamento de peso</p>
-    <p>❤️ Atendimento emergencial e cuidados intensivos</p>
+      <p>🐾 Consultas de rotina e check-ups completos</p>
+      <p>💉 Vacinação e controle de parasitas</p>
+      <p>🩺 Exames laboratoriais e diagnósticos por imagem</p>
+      <p>⚕️ Cirurgias com monitoramento seguro</p>
+      <p>🍖 Nutrição e acompanhamento de peso</p>
+      <p>❤️ Atendimento emergencial e cuidados intensivos</p>
     </ul>
 
     <h3>Seu pet em boas mãos</h3>
@@ -51,17 +34,15 @@
   </div>
 </section>
 
-
-<footer class="footer">
-    <p>© 2025 VetCare - Todos os direitos reservados</p>
-</footer>
+<?php include 'footer.php'; ?>
+<!-- FOOTER ORIGINAL FOI MOVIDO PARA footer.php -->
 
 <script>
+// Script do menu hambúrguer - mantido igual
 const menuLinks = document.querySelectorAll('.menu a');
 const menuToggle = document.getElementById('menu-toggle');
 menuLinks.forEach(link => {
     link.addEventListener('click', () => { menuToggle.checked = false; });
 });
 </script>
-</body>
-</html>
+
