@@ -5,7 +5,7 @@
 $host = "localhost";
 $user = "root";
 $pass = "";
-$db   = "veterinaria";
+$db = "clinica_veterinaria";
 
 // Criar conexão
 $conn = new mysqli($host, $user, $pass, $db);

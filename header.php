@@ -25,15 +25,11 @@ if (!isset($_SESSION)) {
             <ul class="menu">
                 <li><a href="index.php">Home</a></li>
                 <li><a href="cadastro_cliente.php">Clientes</a></li>
-                <li><a href="cadastro_animal.php">Animais</a></li>
+                <li><a href="cadastro_animal.php">Cadastrar Animal</a></li>
+                <li><a href="listar_animais.php">Lista de Animais</a></li>
                 <li><a href="agendamento.php">Consultas</a></li>
                 <li><a href="relatorios.php">Relatórios</a></li>
-                <li><a href="sobre.php">Sobre</a></li>
-
-                <?php if(isset($_SESSION['usuario_id'])): ?>
-                    <li><a href="logout.php">Sair</a></li>
-                <?php endif; ?>
-
+                <li><a href="logout.php">Sair</a></li>
             </ul>
         </nav>
     </div>
